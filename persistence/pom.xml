@@ -23,7 +23,6 @@
     </parent>
 
     <artifactId>persistence</artifactId>
-    <packaging>war</packaging>
     <name>persistence</name>
     <description>A starter Java EE 6 webapp project for use on JBoss AS 7 / EAP 6, generated from the jboss-javaee6-webapp archetype</description>
 
@@ -96,6 +95,14 @@
 
         <!-- First declare the APIs we depend on and need for compilation. All 
             of them are provided by JBoss AS 7 -->
+
+        <!-- Import the CDI API, we use provided scope as the API is included in 
+            JBoss AS 7 -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Import the Common Annotations API (JSR-250), we use provided scope 
             as the API is included in JBoss AS 7 -->
@@ -201,6 +208,15 @@
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>${version.jboss.maven.plugin}</version>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 
