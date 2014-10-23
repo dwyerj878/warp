@@ -1,0 +1,103 @@
+<html>
+<head>
+ <!-- <meta http-equiv="Refresh" content="0; URL=index.jsf">  -->
+ <link rel="stylesheet" type="text/css" href="resources/css/screen.css" />
+ <script type="text/javascript" src="knockout-3.2.0.js"> </script>
+ <script type="text/javascript" src="rest.js"> </script>	
+ <title>Applications</title>
+</head>
+
+<body>
+	<div id="header" class="header">
+		<span style="font-size: 20pt;float:left;">WARP</span>		
+		<div style="float:right; padding-top: 30">
+			<span style="font-size: 20pt; color: blue;">User Management</span>
+		</div>			
+	</div>
+			
+	<div id="main" class="content">
+
+		<p>Applications</p>
+		<table border="1" class="simpletablestyle" >
+			<thead>
+				<tr>
+					<th>idx</th>
+					<th>id</th>
+					<th>name</th>
+				</tr>
+			</thead>
+			<tbody data-bind="foreach: users">
+				<tr>
+					<td data-bind="text: $index"></td>
+					<td data-bind="text: id"></td>
+					<td data-bind="text: name"></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>New</td>
+					<td><button
+							data-bind="enable: newApplicationName().length > 0, click: addApp">Save</button></td>
+					<td><input
+						data-bind='value: newApplicationName, valueUpdate: "afterkeydown"' /></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<div style="height: 5000px"></div>
+
+
+	<script type="text/javascript">
+	function PageModel() {
+		console.log("Create Model");    			
+	    this.apps = ko.observableArray([]);
+	    this.newApplicationName = ko.observable("");
+
+	    this.updateApps = function() {
+	    	this.apps.removeAll();    		
+			console.log("Updating user list");
+		    var foundApps = AppWS.listAllApplications();		    
+		    console.log("Found " +foundApps.length + " applications");
+		    
+		    for (var i =0; i < foundApps.length; i++) {
+			    var app = foundApps[i];		    	
+		    	this.apps.push(app);
+		    	console.log(app);
+		    	
+		    }
+		    console.log("Updated app list " + this.users().length);
+		    
+		}.bind(this);
+
+		this.addApp = function() {
+			var entity={name:this.newApplicationName()};
+			var success = this.updateApps;
+			var callback = function(httpCode, xmlHttpRequest, value){
+				if (httpCode != 200) {
+					console.error("FAIL!!! " + xmlHttpRequest.response);
+					var errors = xmlHttpRequest.response;
+					alert(errors);
+				} else {
+					success();
+				}
+				returnValue = value;
+				
+			};
+			var req = {$entity:entity, $callback:callback, async:false};
+			var created = AppWS.createApplication(req);
+				
+		}.bind(this);
+
+	    
+	    this.updateApps();
+
+	    
+	};
+	model = new PageModel(); 
+
+	ko.applyBindings(model);
+</script>
+
+
+</body>
+</html>
