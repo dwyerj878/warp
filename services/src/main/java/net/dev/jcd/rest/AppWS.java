@@ -108,7 +108,7 @@ public class AppWS {
         } catch (ValidationException e) {
             // Handle the unique constrain violation
             Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("email", "Email taken");
+            responseObj.put("name", "Name Already in use");
             builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
         } catch (Exception e) {
             // Handle generic exceptions

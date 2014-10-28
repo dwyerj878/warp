@@ -31,7 +31,7 @@
 				<tr>
 					<td data-bind="text: $index" style="width:100px;"></td>
 					<td data-bind="text: id" style="width:110px;"></td>
-					<td style="width:300px;"> <a data-bind="text: name, click: addApp"/></td>
+					<td style="width:300px;"> <a data-bind="text: name, click: $parent.showApp"> </a></td>
 				</tr>
 			</tbody>
 			
@@ -73,6 +73,10 @@
 		    }
 		    console.log("Updated app list " + this.apps().length);
 		    
+		}.bind(this);
+
+		this.showApp = function(target) {
+			console.log(target);
 		}.bind(this);
 
 		this.addApp = function() {
