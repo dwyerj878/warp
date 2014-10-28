@@ -19,27 +19,33 @@
 
 		<p>Applications</p>
 		<table border="1" class="simpletablestyle" >
-			<thead>
+			<thead style="display:block;">
 				<tr>
-					<th>idx</th>
-					<th>id</th>
-					<th>name</th>
+					<th style="width:100px;">idx</th>
+					<th style="width:110px;">id</th>
+					<th style="width:300px;">name</th>
 				</tr>
 			</thead>
-			<tbody data-bind="foreach: users">
+			
+			<tbody data-bind="foreach: apps" style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
 				<tr>
-					<td data-bind="text: $index"></td>
-					<td data-bind="text: id"></td>
-					<td data-bind="text: name"></td>
+					<td data-bind="text: $index" style="width:100px;"></td>
+					<td data-bind="text: id" style="width:110px;"></td>
+					<td style="width:300px;"> <a data-bind="text: name, click: addApp"/></td>
 				</tr>
 			</tbody>
-			<tfoot>
+			
+			<tfoot style="display:block;">
 				<tr>
-					<td>New</td>
-					<td><button
-							data-bind="enable: newApplicationName().length > 0, click: addApp">Save</button></td>
-					<td><input
-						data-bind='value: newApplicationName, valueUpdate: "afterkeydown"' /></td>
+					<td style="width:100px;">
+						New
+					</td>
+					<td style="width:110px;">
+						<button data-bind="enable: newApplicationName().length > 0, click: addApp">Save</button>
+					</td>
+					<td style="width:300px;">
+						<input data-bind='value: newApplicationName, valueUpdate: "afterkeydown"' />
+					</td>
 				</tr>
 			</tfoot>
 		</table>
@@ -65,7 +71,7 @@
 		    	console.log(app);
 		    	
 		    }
-		    console.log("Updated app list " + this.users().length);
+		    console.log("Updated app list " + this.apps().length);
 		    
 		}.bind(this);
 
@@ -84,7 +90,7 @@
 				
 			};
 			var req = {$entity:entity, $callback:callback, async:false};
-			var created = AppWS.createApplication(req);
+			var created = AppWS.createApp(req);
 				
 		}.bind(this);
 

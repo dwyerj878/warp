@@ -1,16 +1,19 @@
 package net.dev.jcd.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @SuppressWarnings("serial")
@@ -25,8 +28,12 @@ public class Application implements Serializable {
 
     @NotNull
     @NotEmpty
-    @Email
     private String name;
+    
+    @OneToMany(fetch=FetchType.EAGER)
+    @JoinColumn(name="applicationId")
+    private Set<ApplicationProperty> properties;
+
 
 	/**
 	 * @return the id
@@ -55,6 +62,15 @@ public class Application implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Set<ApplicationProperty> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Set<ApplicationProperty> properties) {
+		this.properties = properties;
+	}
+
     
     
 

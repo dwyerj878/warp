@@ -146,6 +146,8 @@ input {
 /*  -----  table style  -------  */
 
 
+
+
 /*  = Simple Table style (black header, grey/white stripes  */
 
 .simpletablestyle {
@@ -165,8 +167,14 @@ input {
   padding:5px 5px;
 }
 
+.simpletablestyle tbody {
+	height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .simpletablestyle th {
-	background: url(#{request.contextPath}/resources/gfx/bkg-blkheader.png) black repeat-x top left;
+  background: url(#{request.contextPath}/resources/gfx/bkg-blkheader.png) black repeat-x top left;
   font-size:12px;
   font-weight:normal;
   padding:0 10px 0 5px;
