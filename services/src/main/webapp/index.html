@@ -47,14 +47,18 @@
 			<tfoot>
 				<tr>
 					<td>New</td>
-					<td><button
-							data-bind="enable: newUserName().length > 0 && newUserEmail().length > 0, click: addUser">Save</button></td>
-					<td><input
-						data-bind='value: newUserName, valueUpdate: "afterkeydown"' /></td>
-					<td><input
-						data-bind='value: newUserEmail, valueUpdate: "afterkeydown"' /></td>
-					<td><input
-						data-bind='value: newPhoneNumber, valueUpdate: "afterkeydown"' /></td>
+					<td>
+						<button data-bind="enable: newUserName().length > 0 && newUserEmail().length > 0, click: addUser">Save</button>
+					</td>
+					<td>
+						<input data-bind='value: newUserName, valueUpdate: "afterkeydown"' />
+					</td>
+					<td>
+						<input data-bind='value: newUserEmail, valueUpdate: "afterkeydown"' />
+					</td>
+					<td>
+						<input data-bind='value: newPhoneNumber, valueUpdate: "afterkeydown"' />
+					</td>
 				</tr>
 			</tfoot>
 		</table>
