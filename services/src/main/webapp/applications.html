@@ -16,8 +16,17 @@
 	</div>
 			
 	<div id="main" class="content">
-
-		<p>Applications</p>
+		<table>
+		<tr>
+		<td>
+		<div>Applications</div>
+		</td>
+		<td>
+		<div data-bind="text: applicationName"></div>
+		</td>
+		</tr>
+		<tr>
+		<td>
 		<table border="1" class="simpletablestyle" >
 			<thead style="display:block;">
 				<tr>
@@ -31,7 +40,7 @@
 				<tr>
 					<td data-bind="text: $index" style="width:100px;"></td>
 					<td data-bind="text: id" style="width:110px;"></td>
-					<td style="width:300px;"> <a data-bind="text: name, click: addApp"/></td>
+					<td style="width:300px;"> <a data-bind="text: name, click: $parent.showApp"> </a></td>
 				</tr>
 			</tbody>
 			
@@ -49,6 +58,43 @@
 				</tr>
 			</tfoot>
 		</table>
+		</td>
+		<td>
+		<!-- properties style -->
+		<table border="1" class="simpletablestyle" data-bind="visible: applicationName() != null">
+			<thead style="display:block;">
+				<tr>
+					<th style="width:100px;">idx</th>
+					<th style="width:110px;">id</th>
+					<th style="width:300px;">name</th>
+				</tr>
+			</thead>
+			
+			<tbody data-bind="foreach: apps" style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
+				<tr>
+					<td data-bind="text: $index" style="width:100px;"></td>
+					<td data-bind="text: id" style="width:110px;"></td>
+					<td style="width:300px;"> <a data-bind="text: name, click: $parent.showApp"> </a></td>
+				</tr>
+			</tbody>
+			
+			<tfoot style="display:block;">
+				<tr>
+					<td style="width:100px;">
+						New
+					</td>
+					<td style="width:110px;">
+						<button data-bind="enable: newApplicationName().length > 0, click: addApp">Save</button>
+					</td>
+					<td style="width:300px;">
+						<input data-bind='value: newApplicationName, valueUpdate: "afterkeydown"' />
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+		</td>
+		</tr>
+		</table>
 	</div>
 	<div style="height: 5000px"></div>
 
@@ -58,6 +104,9 @@
 		console.log("Create Model");    			
 	    this.apps = ko.observableArray([]);
 	    this.newApplicationName = ko.observable("");
+	    this.applicationName = ko.observable(null);
+	    this.applicationProperties = ko.observableArray([]);
+	    
 
 	    this.updateApps = function() {
 	    	this.apps.removeAll();    		
@@ -73,6 +122,12 @@
 		    }
 		    console.log("Updated app list " + this.apps().length);
 		    
+		}.bind(this);
+
+		this.showApp = function(target) {
+			console.log(target);
+			this.applicationName = target.name;
+			console.log("selected");
 		}.bind(this);
 
 		this.addApp = function() {
