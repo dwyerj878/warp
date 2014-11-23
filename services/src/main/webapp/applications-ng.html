@@ -40,13 +40,15 @@
 					<th style="width:100px;">idx</th>
 					<th style="width:110px;">id</th>
 					<th style="width:300px;">name</th>
+					<th style="width:300px;">action</th>
 				</tr>
 			</thead>
 			
 			<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
 				<tr ng-repeat="app in apps" >
-					<td>{{app.index}}</td>
+					<td>{{$index}}</td>
 					<td style="width:110px;">{{app.id}}</td>
+					<td style="width:300px;">{{app.name}}</td>
 					<td style="width:300px;"> <a>Show App</a></td>
 				</tr>
 			</tbody>
