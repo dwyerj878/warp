@@ -4,6 +4,7 @@
  <link rel="stylesheet" type="text/css" href="resources/css/screen.css" />
  	
  <script type="text/javascript" src="angular/angular.js"></script>
+ <script type="text/javascript" src="angular/angular-resource.js"></script>
  <script type="text/javascript" src="js/rest.js"> </script>
  <script type="text/javascript" src="js/app.js"></script>
 <!--  <script type="text/javascript" src="js/controllers.js"></script> -->
@@ -59,10 +60,10 @@
 						New
 					</td>
 					<td style="width:110px;">
-						<button >Save</button>
+						<button ng-disabled='saveAppButtonDisabled()' ng-click='saveNewApp()'>Save</button>
 					</td>
 					<td style="width:300px;">
-						<input data-bind='value: newApplicationName, valueUpdate: "afterkeydown"' />
+						<input ng-model='newAppName'/>
 					</td>
 				</tr>
 			</tfoot>
