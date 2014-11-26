@@ -2,10 +2,15 @@ var appMgrApp = angular.module('appMgr', ['ngResource']);
 
 appMgrApp.controller('appListController',['$scope', 'Apps',  
    function ($scope, Apps){
-		console.info("init appListController start");
-		$scope.newAppName = '';
-		$scope.apps = Apps.query();
-		console.info("init appListController complete");
+	
+		var init = function() {
+			console.info("init appListController start");
+			$scope.newAppName = '';
+			$scope.apps = Apps.query();
+			console.info("init appListController complete");
+		}
+		
+		init();
 		
 		$scope.saveAppButtonDisabled = function() {
 			return $scope.newAppName.length == 0;
@@ -14,15 +19,21 @@ appMgrApp.controller('appListController',['$scope', 'Apps',
 		
 		$scope.saveNewApp = function() {
 			console.log("save");
-			Apps.save({name : $scope.newAppName});
-			$scope.apps = Apps.query();
-			
-			$scope.newAppName = '';
-			console.log('saved');
-		}
+			Apps.save({name : $scope.newAppName}, function(data) {
+				Apps.query(function(data){
+					console.log('saved');
+					$scope.apps = data;
+					$scope.newAppName = '';    
+				}, function(err){
+					alert('refresh failed');
+				});
+			},
+			function(data) {alert("save failed")})
+		};
 		
 		
-  }]);
+  }]
+);
 
 
 appMgrApp.factory('Apps', function($resource) {
