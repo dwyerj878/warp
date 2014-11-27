@@ -1,134 +1,26 @@
-<html>
+<!doctype html>
+<html lang="en" ng-app="appMgr">
 <head>
- <!-- <meta http-equiv="Refresh" content="0; URL=index.jsf">  -->
  <link rel="stylesheet" type="text/css" href="resources/css/screen.css" />
- <script type="text/javascript" src="knockout-3.2.0.js"> </script>
- <script type="text/javascript" src="js/rest.js"> </script>	
- <title>Users</title>
+ 	
+ <script type="text/javascript" src="angular/angular.js"></script>
+  <script type="text/javascript" src="angular/angular-route.js"></script>
+ <script type="text/javascript" src="angular/angular-resource.js"></script>
+ <script type="text/javascript" src="js/rest.js"> </script>
+ <script type="text/javascript" src="js/app.js"></script>
+<!--  <script type="text/javascript" src="js/controllers.js"></script> -->
+<!--  <script type="text/javascript" src="js/services.js"></script> -->
+ 
+ <title>Applications</title>
 </head>
-
 <body>
-	<div id="header" class="header">
+<div id="header" class="header">
 		<span style="font-size: 20pt;float:left;">WARP</span>		
 		<div style="float:right; padding-top: 30">
-			<span style="font-size: 20pt; color: blue;">User Management</span>
+			<span style="font-size: 20pt; color: blue;">Application Management</span>
 		</div>			
 	</div>
-			
-	<div id="main" class="content">
-		New item: <input
-			data-bind='value: itemToAdd, valueUpdate: "afterkeydown"' />
-		<button data-bind="enable: itemToAdd().length > 0, click: addItem">Add</button>
-		<hr>
-		<p>Your items:</p>
-		<select multiple="multiple" size="5" data-bind="options: items">
-		</select>
-
-		<p>Users</p>
-		<table border="1" class="simpletablestyle" >
-			<thead>
-				<tr>
-					<th>idx</th>
-					<th>id</th>
-					<th>name</th>
-					<th>email</th>
-					<th>Phone #</th>
-				</tr>
-			</thead>
-			<tbody data-bind="foreach: users">
-				<tr>
-					<td data-bind="text: $index"></td>
-					<td data-bind="text: id"></td>
-					<td data-bind="text: name"></td>
-					<td data-bind="text: email"></td>
-					<td data-bind="text: phoneNumber"></td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td>New</td>
-					<td>
-						<button data-bind="enable: newUserName().length > 0 && newUserEmail().length > 0, click: addUser">Save</button>
-					</td>
-					<td>
-						<input data-bind='value: newUserName, valueUpdate: "afterkeydown"' />
-					</td>
-					<td>
-						<input data-bind='value: newUserEmail, valueUpdate: "afterkeydown"' />
-					</td>
-					<td>
-						<input data-bind='value: newPhoneNumber, valueUpdate: "afterkeydown"' />
-					</td>
-				</tr>
-			</tfoot>
-		</table>
-	</div>
-	<div style="height: 5000px"></div>
-
-
-	<script type="text/javascript">
-	function PageModel() {
-		console.log("Create Model");    			
-	    this.items = ko.observableArray(["Alpha", "Beta", "Gamma"]);
-	    this.itemToAdd = ko.observable("");
-	    this.users = ko.observableArray([]);
-	    this.newUserName = ko.observable("");
-	    this.newUserEmail = ko.observable("");
-	    this.newPhoneNumber = ko.observable("");
-
-	    this.updateUsers = function() {
-	    	this.users.removeAll();    		
-			console.log("Updating user list");
-		    var foundUsers = MemberResourceRESTService.listAllMembers();		    
-		    console.log("Found " +foundUsers.length + " users");
-		    
-		    for (var i =0; i < foundUsers.length; i++) {
-			    var user = foundUsers[i];		    	
-		    	this.users.push(user);
-		    	console.log(user);
-		    	
-		    }
-		    console.log("Updated user list " + this.users().length);
-		    
-		}.bind(this);
-
-		this.addUser = function() {
-			var entity={name:this.newUserName(), email:this.newUserEmail(), phoneNumber:this.newPhoneNumber()};
-			var success = this.updateUsers;
-			var callback = function(httpCode, xmlHttpRequest, value){
-				if (httpCode != 200) {
-					console.error("FAIL!!! " + xmlHttpRequest.response);
-					var errors = xmlHttpRequest.response;
-					alert(errors);
-				} else {
-					success();
-				}
-				returnValue = value;
-				
-			};
-			var req = {$entity:entity, $callback:callback, async:false};
-			var created = MemberResourceRESTService.createMember(req);
-				
-		}.bind(this);
-	    
-	    this.addItem = function() {
-	        if (this.itemToAdd() != "") {
-	            this.items.push(this.itemToAdd()); // Adds the item. Writing to the "items" observableArray causes any associated UI to update.
-	            console.log("added " + this.itemToAdd() + " total items " + this.items().length);
-	            this.itemToAdd(""); // Clears the text box, because it's bound to the "itemToAdd" observable
-	            
-	        }
-	    }.bind(this);  // Ensure that "this" is always this view model
-	    
-	    this.updateUsers();
-
-	    
-	};
-	model = new PageModel(); 
-
-	ko.applyBindings(model);
-</script>
-
+  <div ng-view></div>
 
 </body>
 </html>
