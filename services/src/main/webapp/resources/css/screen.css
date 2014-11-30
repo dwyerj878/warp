@@ -227,3 +227,20 @@ input {
   color:#3883ce;
   text-decoration:none; 
 }
+
+.menuItem {
+	padding-left:15px; 
+	padding-right: 15px;
+	padding-top:5px; 
+	padding-bottom: 5px; 
+	margin-right: 15px;	
+	 
+	background-color: #003399; 
+	color: white;
+	font-weight:bold;
+	fone-size=10px;
+}
+
+.menuItem:hover {
+	background-color: yellow;
+}

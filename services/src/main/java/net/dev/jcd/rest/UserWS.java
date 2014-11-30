@@ -40,18 +40,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.dev.jcd.data.MemberRepository;
-import net.dev.jcd.model.Member;
-import net.dev.jcd.service.MemberRegistration;
+import net.dev.jcd.data.UserRepository;
+import net.dev.jcd.model.User;
+import net.dev.jcd.service.UserService;
 
 /**
  * JAX-RS Example
  * <p/>
- * This class produces a RESTful service to read/write the contents of the members table.
+ * This class produces a RESTful service to read/write the contents of the users table.
  */
-@Path("/members")
+@Path("/users")
 @RequestScoped
-public class MemberResourceRESTService {
+public class UserWS {
 
     @Inject
     private Logger log;
@@ -60,43 +60,43 @@ public class MemberResourceRESTService {
     private Validator validator;
 
     @Inject
-    private MemberRepository repository;
+    private UserRepository repository;
 
     @Inject
-    MemberRegistration registration;
+    UserService registration;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Member> listAllMembers() {
+    public List<User> listAllUsers() {
         return repository.findAllOrderedByName();
     }
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Member lookupMemberById(@PathParam("id") long id) {
-        Member member = repository.findById(id);
-        if (member == null) {
+    public User lookupUserById(@PathParam("id") long id) {
+        User user = repository.findById(id);
+        if (user == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return member;
+        return user;
     }
 
     /**
-     * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
+     * Creates a new user from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createMember(Member member) {
+    public Response createUser(User member) {
     	
         Response.ResponseBuilder builder = null;
 
         try {
         	log.info("adding member :" + member);
             // Validates member using bean validation
-            validateMember(member);
+            validateUser(member);
 
             registration.register(member);
 
@@ -130,20 +130,20 @@ public class MemberResourceRESTService {
      * exception so that it can be interpreted separately.
      * </p>
      * 
-     * @param member Member to be validated
+     * @param user Member to be validated
      * @throws ConstraintViolationException If Bean Validation errors exist
      * @throws ValidationException If member with the same email already exists
      */
-    private void validateMember(Member member) throws ConstraintViolationException, ValidationException {
+    private void validateUser(User user) throws ConstraintViolationException, ValidationException {
         // Create a bean validator and check for issues.
-        Set<ConstraintViolation<Member>> violations = validator.validate(member);
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
 
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
 
         // Check the uniqueness of the email address
-        if (emailAlreadyExists(member.getEmail())) {
+        if (emailAlreadyExists(user.getEmail())) {
             throw new ValidationException("Unique Email Violation");
         }
     }
@@ -175,12 +175,12 @@ public class MemberResourceRESTService {
      * @return True if the email already exists, and false otherwise
      */
     public boolean emailAlreadyExists(String email) {
-        Member member = null;
+        User user = null;
         try {
-            member = repository.findByEmail(email);
+            user = repository.findByEmail(email);
         } catch (NoResultException e) {
             // ignore
         }
-        return member != null;
+        return user != null;
     }
 }

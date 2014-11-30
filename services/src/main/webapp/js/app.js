@@ -35,6 +35,24 @@ appMgrApp.controller('AppsController',['$scope', 'Apps',
   }]
 );
 
+appMgrApp.controller('UsersController',['$scope', 'Users',  
+   function ($scope, Users){
+	
+		var init = function() {
+			console.info("init UsersController start");			
+			$scope.users = Users.query();
+			console.info("init UsersController complete");
+		}
+		
+		init();
+		
+		$scope.newUser = function() {
+			
+		};
+		
+  }]
+);
+
 
 appMgrApp.controller('AppDetailController',['$scope', '$routeParams', 'Apps',  
   function ($scope, $routeParams, Apps){
@@ -49,7 +67,7 @@ appMgrApp.controller('AppDetailController',['$scope', '$routeParams', 'Apps',
 				console.info("found app " + $scope.app.name);
 			}, 
 			function (error) {
-				alert("Could not find app" + err);
+				alert("Could not find app" + error);
 			}
 		);
 		
@@ -59,28 +77,34 @@ appMgrApp.controller('AppDetailController',['$scope', '$routeParams', 'Apps',
 	
 	init();
 	
-	$scope.saveAppButtonDisabled = function() {
-		return $scope.newAppName.length == 0;
-	
-	}
-	
-	$scope.saveApp = function() {
-		console.log("save");
-		Apps.save({name : $scope.newAppName}, function(data) {
-			Apps.query(function(data){
-				console.log('saved');
-				$scope.apps = data;
-				$scope.newAppName = '';    
-			}, function(err){
-				alert('refresh failed');
-			});
-		},
-		function(data) {alert("save failed")})
-   		};
-   		
-   		
      }]
 );
+
+
+appMgrApp.controller('UserDetailController',['$scope', '$routeParams', 'Users',  
+        function ($scope, $routeParams, Users){
+
+      	var init = function() {
+      		console.info("init UserDetailController start");
+      		$scope.userId = $routeParams.userId;
+      		Users.get({userId : $scope.userId},
+      			function(data) {
+      				$scope.user = data;
+      				var x =data;
+      				console.info("found user " + $scope.user.name);
+      			}, 
+      			function (error) {
+      				alert("Could not find user" + error);
+      			}
+      		);
+      		
+      		console.info("init UserDetailController complete");
+      	}
+      	
+      	init();
+         		
+       }]
+  );
 
 
 
@@ -88,8 +112,12 @@ appMgrApp.factory('Apps', function($resource) {
 	return $resource('http://127.0.0.1:8080/services/rest/apps/:appId',  {appId:'@id'} ); // Note the full endpoint address
 });
 
+appMgrApp.factory('Users', function($resource) {
+	return $resource('http://127.0.0.1:8080/services/rest/users/:userId',  {userId:'@id'} ); // Note the full endpoint address
+});
+
 appMgrApp.config(['$routeProvider',
-                    function($routeProvider) {
+                  function($routeProvider) {
                       $routeProvider.
                       when('/apps/:appId', {
                           templateUrl: 'partials/app-detail.html',
@@ -99,6 +127,14 @@ appMgrApp.config(['$routeProvider',
                           templateUrl: 'partials/apps.html',
                           controller: 'AppsController'
                         }).
+                        when('/users/:userId', {
+                            templateUrl: 'partials/user-detail.html',
+                            controller: 'UserDetailController'
+                          }).                      
+                          when('/users', {
+                            templateUrl: 'partials/users.html',
+                            controller: 'UsersController'
+                          }).                        
                         otherwise({
                           redirectTo: '/apps'
                         });
