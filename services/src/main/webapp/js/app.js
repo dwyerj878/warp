@@ -71,11 +71,63 @@ appMgrApp.controller('AppDetailController',['$scope', '$routeParams', 'Apps',
 			}
 		);
 		
+		$scope.newProp = {
+				name:"",
+				environment:"",
+				type:"",
+				value:""					
+		}
+
 		
 		console.info("init AppDetailController complete");
 	}
 	
 	init();
+	
+	$scope.saveProperty = function() {
+		console.info("save property");
+		$scope.newProp.appId = $scope.app.id;
+		var existingProps = $scope.app.properties;
+		existingProps[$scope.app.properties.length] = {
+				name:$scope.newProp.name,
+				environment:$scope.newProp.environment,
+				type:$scope.newProp.type,
+				value:$scope.newProp.value					
+		};
+		$scope.newProp.name = "";
+		$scope.newProp.type = "";
+		$scope.newProp.value = "";				
+		
+		
+	}
+	
+	$scope.saveApp = function() {
+		if ($scope.app.id) {
+			Apps.update({id:$scope.app.id}, $scope.app,
+					function(data) {
+						$scope.app = data;
+						var x =data;
+						console.info("found app " + $scope.app.name);
+					}, 
+					function (error) {
+						alert("Could not find app" + error);
+					}
+				);
+			
+		} else {
+			Apps.save($scope.app,
+					function(data) {
+						$scope.app = data;
+						var x =data;
+						console.info("found app " + $scope.app.name);
+					}, 
+					function (error) {
+						alert("Could not find app" + error);
+					}
+				);
+	}
+	}
+		
 	
      }]
 );
@@ -113,7 +165,9 @@ appMgrApp.factory('Apps', function($resource) {
 });
 
 appMgrApp.factory('Users', function($resource) {
-	return $resource('http://127.0.0.1:8080/services/rest/users/:userId',  {userId:'@id'} ); // Note the full endpoint address
+	return $resource('http://127.0.0.1:8080/services/rest/users/:userId',  {userId:'@id'}, 
+	{ 'update': {method: 'PUT'}	}		
+	); // Note the full endpoint address
 });
 
 appMgrApp.config(['$routeProvider',

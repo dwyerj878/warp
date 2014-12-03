@@ -1,14 +1,46 @@
 <div id="main" class="content">
 	Application Detail
 	<table class="simpletablestyle" >
-	<tr>
-	<td>ID</td>
-	<td>{{app.id}}</td>
-	</tr>
+		<tr>
+			<td>ID</td>
+			<td>{{app.id}}</td>
+		</tr>
+		<tr>
+			<td>Name</td>
+			<td><input ng-model='app.name'/></td>
+		</tr>
+	</table>
 	
-	<tr>
-	<td>Name</td>
-	<td><input ng-model='app.name'/></td>
-	</tr>
+	<table border="1" class="simpletablestyle" >
+		<thead style="display:block;">
+			<tr>
+				<th style="width:100px;">name</th>
+				<th style="width:100px;">environment</th>
+				<th style="width:100px;">type</th>
+				<th style="width:310px;">value</th>
+				<th style="width:100px;">action</th>
+			</tr>
+		</thead>
+		
+		<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
+			<tr ng-repeat="prop in app.properties" >
+				<td style="width:100px;">{{prop.name}}</td>
+				<td style="width:100px;">{{prop.environment}}</td>
+				<td style="width:100px;">{{prop.type}}</td>
+				<td style="width:310px;">{{prop.value}}</td>
+				<td style="width:100px;"><button ng-click='deleteProperty()'>Delete</button></td>
+			</tr>
+			<tr>
+				<td style="width:100px;"><input ng-model="newProp.name" width="5"/></td>
+				<td style="width:100px;"><input ng-model="newProp.environment"/></td>
+				<td style="width:100px;"><input ng-model="newProp.type"/></td>
+				<td style="width:310px;"><input ng-model="newProp.value"/></td>
+				<td style="width:100px;"><button ng-click='saveProperty()'>Save</button></td>
+			</tr>			
+		</tbody>
+		<button ng-click='saveApp()'>Save</button>
+		
+		
+		
 	</table> 
 </div>
