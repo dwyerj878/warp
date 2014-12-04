@@ -125,12 +125,12 @@ public class AppWS {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id:[0-9][0-9]*}")
-    public Response updateApp(Application app) {
+    public Response updateApp(@PathParam("id") long id, Application app) {
     	
         Response.ResponseBuilder builder = null;
 
         try {
-        	log.info("adding member :" + app);
+        	log.info("updating app :" + app);
             // Validates member using bean validation
             validateMember(app);
 
@@ -180,7 +180,7 @@ public class AppWS {
         }
 
         // Check the uniqueness of the email address
-        if (nameAlreadyExists(app.getName())) {
+        if (app.getId() == null && nameAlreadyExists(app.getName())) {
             throw new ValidationException("Unique Name Violation");
         }
     }

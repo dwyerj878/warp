@@ -40,7 +40,10 @@ public class AppService {
 
     public void register(Application application) throws Exception {
         log.info("Registering " + application.getName());
-        em.persist(application);
+        if (application.getId() == null)
+        	em.persist(application);
+        else 
+        	em.merge(application);
         memberEventSrc.fire(application);
     }
 }
