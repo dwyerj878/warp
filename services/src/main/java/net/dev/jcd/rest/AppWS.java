@@ -41,7 +41,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.dev.jcd.data.ApplicationRepository;
 import net.dev.jcd.model.Application;
 import net.dev.jcd.service.AppService;
 
@@ -60,23 +59,22 @@ public class AppWS {
     @Inject
     private Validator validator;
 
-    @Inject
-    private ApplicationRepository repository;
 
     @Inject
-    AppService appService;
+    private AppService appService;
+    
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Application> listAllApplications() {
-        return repository.findAllOrderedByName();
+        return appService.findAllOrderedByName();
     }
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     public Application lookupMemberById(@PathParam("id") long id) {
-        Application application = repository.findById(id);
+        Application application = appService.findById(id);
         if (application == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -215,7 +213,7 @@ public class AppWS {
     public boolean nameAlreadyExists(String name) {
         Application app = null;
         try {
-            app = repository.findByName(name);
+            app = appService.findByName(name);
         } catch (NoResultException e) {
             // ignore
         }

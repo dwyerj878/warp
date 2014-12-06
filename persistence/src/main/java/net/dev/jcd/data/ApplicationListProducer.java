@@ -26,8 +26,6 @@ public class ApplicationListProducer {
 
     private List<Application> members;
 
-    // @Named provides access the return value via the EL variable name "members" in the UI (e.g.
-    // Facelets or JSP view)
     @Produces
     @Named
     public List<Application> getApplications() {

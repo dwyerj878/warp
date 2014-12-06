@@ -1,5 +1,6 @@
 package net.dev.jcd.service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
@@ -7,6 +8,8 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import net.dev.jcd.data.ApplicationListProducer;
+import net.dev.jcd.data.ApplicationRepository;
 import net.dev.jcd.model.Application;
 
 
@@ -29,10 +32,16 @@ public class AppService {
     private EntityManager em;
 
     @Inject
-    private Event<Application> memberEventSrc;
+    private Event<Application> appEventSrc;
+    
+    @Inject
+    private ApplicationListProducer appListProducer;
+    
+    @Inject 
+    private ApplicationRepository appRepository;
 
     public void save(Application application) throws Exception {
-        log.info("Registering " + application.getName());
+        log.info("Saving " + application.getName());
         if (application.getId() == null)
         	em.persist(application);
         else 
@@ -43,6 +52,31 @@ public class AppService {
         	existing.setEnvironments(application.getEnvironments());
         	em.merge(existing);
         }
-        memberEventSrc.fire(application);
+        appEventSrc.fire(application);
     }
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Application findById(long id) {
+		return appRepository.findById(id);
+	}
+
+	/**
+	 * @return
+	 */
+	public List<Application> findAllOrderedByName() {
+		return appListProducer.getApplications();
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	public Application findByName(String name) {
+		return appRepository.findByName(name);
+	}
+	
+	
 }

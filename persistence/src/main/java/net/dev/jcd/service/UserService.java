@@ -1,11 +1,15 @@
 package net.dev.jcd.service;
 
+import net.dev.jcd.data.UserListProducer;
+import net.dev.jcd.data.UserRepository;
 import net.dev.jcd.model.User;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -24,6 +28,12 @@ public class UserService {
 
     @Inject
     private EntityManager em;
+    
+    @Inject 
+    private UserRepository userRepository;
+    
+    @Inject
+    private UserListProducer userListProducer;
 
     @Inject
     private Event<User> userEventSrc;
@@ -33,4 +43,27 @@ public class UserService {
         em.persist(user);
         userEventSrc.fire(user);
     }
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public User findById(long id) {
+		return userRepository.findById(id);
+	}
+
+	/**
+	 * @return
+	 */
+	public List<User> getUsers() {
+		return userListProducer.getUsers();
+	}
+
+	/**
+	 * @param email
+	 * @return
+	 */
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
 }

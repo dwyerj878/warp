@@ -40,7 +40,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.dev.jcd.data.UserRepository;
 import net.dev.jcd.model.User;
 import net.dev.jcd.service.UserService;
 
@@ -59,23 +58,22 @@ public class UserWS {
     @Inject
     private Validator validator;
 
-    @Inject
-    private UserRepository repository;
 
     @Inject
-    UserService registration;
+    private UserService userService;
+    
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> listAllUsers() {
-        return repository.findAllOrderedByName();
+        return userService.getUsers();
     }
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     public User lookupUserById(@PathParam("id") long id) {
-        User user = repository.findById(id);
+        User user = userService.findById(id);
         if (user == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -98,7 +96,7 @@ public class UserWS {
             // Validates member using bean validation
             validateUser(member);
 
-            registration.save(member);
+            userService.save(member);
 
             // Create an "ok" response
             builder = Response.ok();
@@ -177,7 +175,7 @@ public class UserWS {
     public boolean emailAlreadyExists(String email) {
         User user = null;
         try {
-            user = repository.findByEmail(email);
+            user = userService.findByEmail(email);
         } catch (NoResultException e) {
             // ignore
         }
