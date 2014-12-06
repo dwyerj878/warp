@@ -1,19 +1,3 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package net.dev.jcd.service;
 
 import net.dev.jcd.model.User;
@@ -24,7 +8,14 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.logging.Logger;
 
-// The @Stateless annotation eliminates the need for manual transaction demarcation
+/**
+ * <p>Project WARP</p>
+ *
+ * <p>Persistence services for {@link User}</p>
+ *
+ * @author jcdwyer
+ *
+ */
 @Stateless
 public class UserService {
 
@@ -37,7 +28,7 @@ public class UserService {
     @Inject
     private Event<User> userEventSrc;
 
-    public void register(User user) throws Exception {
+    public void save(User user) throws Exception {
         log.info("Registering " + user.getName());
         em.persist(user);
         userEventSrc.fire(user);

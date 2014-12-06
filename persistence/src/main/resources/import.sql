@@ -16,8 +16,8 @@
 --
 
 -- You can use this file to load seed data into the database using SQL statements
-insert into User (id, name, email, phone_number) values (0, 'John Smith', 'john.smith@mailinator.com', '2125551212') ;
-insert into User (id, name, email, phone_number) values (1, 'A', 'bb.cc@mailinator.com', '2125551213') ;
+insert into User (id, name, email, phone_number) values (1, 'John Smith', 'john.smith@mailinator.com', '2125551212') ;
+insert into User (id, name, email, phone_number) values (2, 'A', 'bb.cc@mailinator.com', '2125551213') ;
 
-insert into Application (id, name) values (0, 'Application');
-insert into Application (id, name) values (1, 'Test App 2');
+insert into Application (id, name) values (1, 'Application');
+insert into Application (id, name) values (2, 'Test App 2');

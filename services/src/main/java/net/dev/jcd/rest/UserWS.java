@@ -98,7 +98,7 @@ public class UserWS {
             // Validates member using bean validation
             validateUser(member);
 
-            registration.register(member);
+            registration.save(member);
 
             // Create an "ok" response
             builder = Response.ok();

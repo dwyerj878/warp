@@ -99,7 +99,7 @@ public class AppWS {
             // Validates member using bean validation
             validateMember(app);
 
-            appService.register(app);
+            appService.save(app);
 
             // Create an "ok" response
             builder = Response.ok();
@@ -134,7 +134,7 @@ public class AppWS {
             // Validates member using bean validation
             validateMember(app);
 
-            appService.register(app);
+            appService.save(app);
 
             // Create an "ok" response
             builder = Response.ok();

@@ -16,7 +16,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * <p>Project WARP</p>
  * 
- * <p>Environment definitions for an {@link Application}</p>
+ * <p>Environment details for an {@link Application}</p>
+ * 
  *
  * @author jcdwyer
  *
@@ -24,7 +25,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @SuppressWarnings("serial")
 @Entity
 @XmlRootElement
-public class ApplicationProperty implements Serializable {
+public class ApplicationEnvironment implements Serializable {
 
     @Id
     @GeneratedValue
@@ -34,9 +35,6 @@ public class ApplicationProperty implements Serializable {
     @JoinColumn(name="application_id")    
     private Application application;
 
-    @NotNull
-    @NotEmpty
-    private String name;
 
     @NotNull
     @NotEmpty
@@ -45,11 +43,8 @@ public class ApplicationProperty implements Serializable {
     
     @NotNull
     @NotEmpty    
-    private String value;
-    
-    @NotNull
-    @NotEmpty    
-    private String type;
+    private String description;
+
 
 	/**
 	 * @return the id
@@ -58,12 +53,14 @@ public class ApplicationProperty implements Serializable {
 		return id;
 	}
 
+
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 	/**
 	 * @return the application
@@ -72,6 +69,7 @@ public class ApplicationProperty implements Serializable {
 		return application;
 	}
 
+
 	/**
 	 * @param application the application to set
 	 */
@@ -79,19 +77,6 @@ public class ApplicationProperty implements Serializable {
 		this.application = application;
 	}
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	/**
 	 * @return the environment
@@ -100,6 +85,7 @@ public class ApplicationProperty implements Serializable {
 		return environment;
 	}
 
+
 	/**
 	 * @param environment the environment to set
 	 */
@@ -107,33 +93,22 @@ public class ApplicationProperty implements Serializable {
 		this.environment = environment;
 	}
 
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
 
 	/**
-	 * @param value the value to set
+	 * @return the description
 	 */
-	public void setValue(String value) {
-		this.value = value;
+	public String getDescription() {
+		return description;
 	}
 
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
 
 	/**
-	 * @param type the type to set
+	 * @param description the description to set
 	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setDescription(String description) {
+		this.description = description;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -145,12 +120,13 @@ public class ApplicationProperty implements Serializable {
 		result = prime * result
 				+ ((application == null) ? 0 : application.hashCode());
 		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result
 				+ ((environment == null) ? 0 : environment.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -163,45 +139,29 @@ public class ApplicationProperty implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ApplicationProperty other = (ApplicationProperty) obj;
+		ApplicationEnvironment other = (ApplicationEnvironment) obj;
 		if (application == null) {
 			if (other.application != null)
 				return false;
 		} else if (!application.equals(other.application))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
 			return false;
 		if (environment == null) {
 			if (other.environment != null)
 				return false;
 		} else if (!environment.equals(other.environment))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "ApplicationProperty [id=" + id + ", application=" + application
-				+ ", name=" + name + ", environment=" + environment
-				+ ", value=" + value + ", type=" + type + "]";
-	}
-
-
+    
     
 }
