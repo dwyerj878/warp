@@ -3,6 +3,7 @@ package net.dev.jcd.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,8 +31,8 @@ public class Application implements Serializable {
     @NotEmpty
     private String name;
     
-    @OneToMany(fetch=FetchType.EAGER)
-    @JoinColumn(name="applicationId")
+    @OneToMany(fetch=FetchType.EAGER, cascade={CascadeType.ALL})
+    @JoinColumn(name="applicationId")    
     private Set<ApplicationProperty> properties;
 
 

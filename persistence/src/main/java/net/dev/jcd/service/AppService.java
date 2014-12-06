@@ -43,7 +43,12 @@ public class AppService {
         if (application.getId() == null)
         	em.persist(application);
         else 
-        	em.merge(application);
+        {
+        	Application existing = em.find(Application.class, application.getId());
+        	existing.setName(application.getName());
+        	existing.setProperties(application.getProperties());
+        	em.merge(existing);
+        }
         memberEventSrc.fire(application);
     }
 }
