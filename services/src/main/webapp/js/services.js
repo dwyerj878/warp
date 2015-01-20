@@ -1,4 +1,3 @@
-
 angular.module('appMgr.services', []);
 
 angular.module('appMgr.services').factory('Apps', function($resource) {
