@@ -1,14 +1,29 @@
 <div id="main" class="content">
 	User Detail
-	<table class="simpletablestyle" >
-	<tr>
-	<td>ID</td>
-	<td>{{user.id}}</td>
-	</tr>
-	
-	<tr>
-	<td>Name</td>
-	<td><input ng-model='user.name'/></td>
-	</tr>
-	</table> 
+	<table class="simpletablestyle">
+		<tr>
+			<td>ID</td>
+			<td>{{user.id}}</td>
+		</tr>
+
+		<tr>
+			<td>Name</td>
+			<td><input data-ng-model='user.name' size="50"/></td>
+		</tr>
+
+		<tr>
+			<td>email</td>
+			<td><input data-ng-model='user.email' size="50"/></td>
+		</tr>
+
+		<tr>
+			<td>phone</td>
+			<td><input data-ng-model='user.phoneNumber' size="30"/></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<button data-ng-click='saveUser()' style="float: right">Save</button>
+			</td>
+		</tr>
+	</table>
 </div>

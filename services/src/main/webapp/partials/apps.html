@@ -10,7 +10,7 @@
 		</thead>
 		
 		<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
-			<tr ng-repeat="app in apps" >
+			<tr data-ng-repeat="app in apps" >
 				<td style="width:100px;">{{$index}}</td>
 				<td style="width:110px;">{{app.id}}</td>
 				<td style="width:300px;"> <a href="#/apps/{{app.id}}">{{app.name}}</a></td>
@@ -23,10 +23,11 @@
 					New
 				</td>
 				<td style="width:110px;">
-					<button ng-disabled='saveAppButtonDisabled()' ng-click='saveNewApp()'>Save</button>
+					
 				</td>
 				<td style="width:300px;">
-					<input ng-model='newAppName'/>
+					<input data-ng-model='newAppName' style="width: 80%;"/>
+					<button data-ng-disabled='saveAppButtonDisabled()' data-ng-click='saveNewApp()' style="float : right;">Save</button>
 				</td>
 			</tr>
 		</tfoot>

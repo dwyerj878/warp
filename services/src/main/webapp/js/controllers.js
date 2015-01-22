@@ -136,7 +136,6 @@ angular.module('appMgr.controllers').controller(
 							userId : $scope.userId
 						}, function(data) {
 							$scope.user = data;
-							var x = data;
 							console.info("found user " + $scope.user.name);
 						}, function(error) {
 							alert("Could not find user" + error);
@@ -145,6 +144,29 @@ angular.module('appMgr.controllers').controller(
 						console.info("init UserDetailController complete");
 					}
 
+					$scope.saveUser = function() {
+						if ($scope.user.id) {
+							Users.update({
+								userId : $scope.user.id
+							}, $scope.user, function(data) {
+								$scope.user = data;
+								var x = data;
+								console.info("saved user " + $scope.user.name);
+							}, function(error) {
+								alert("Could not save user" + error.status);
+							});
+
+						} else {
+							Users.save($scope.user, function(data) {
+								$scope.user = data;
+								var x = data;
+								console.info("Saved user " + $scope.user.name);
+							}, function(error) {
+								alert("Could not save user" + error.status);
+							});
+						}
+					}
+					
 					init();
 
 				} ]);

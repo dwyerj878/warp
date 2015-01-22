@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="appMgr">
+<html lang="en" x-ng-app="appMgr">
 <head>
  <link rel="stylesheet" type="text/css" href="resources/css/screen.css" />
  	
@@ -16,17 +16,21 @@
 </head>
 <body>
 <div id="header" class="header">
-		<span style="font-size: 20pt;float:left;">WARP</span>		
-		<div style="float:right; padding-top: 30">
+		<div style="position:fixed; left:15px; border: red; border-bottom-style: solid;">
+			<span style="font-size: 20pt">WARP</span>
+		</div>
+				
+		<div style="position:fixed; right:15px; border: red; border-bottom-style: solid;">
 			<span style="font-size: 20pt; color: blue;">Application Management</span>
 		</div>
+		
 		<div id="menu" style="position: fixed; top: 55px; left: 10px; ">
 		
-			<a ng-href ="#/apps" class="menuItem">Applications</a>
-			<a ng-href ="#/users" class="menuItem">Users</a>
+			<a x-ng-href ="#/apps" class="menuItem">Applications</a>
+			<a x-ng-href ="#/users" class="menuItem">Users</a>
 		</div>			
 	</div>
-  <div ng-view></div>
+  <div x-ng-view></div>
 
 </body>
 </html>

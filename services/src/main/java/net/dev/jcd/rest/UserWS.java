@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -33,6 +34,7 @@ import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -117,6 +119,42 @@ public class UserWS {
 
         return builder.build();
     }
+    
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id:[0-9][0-9]*}")
+    public Response updateUser(@PathParam("id") long id, User member) {
+        Response.ResponseBuilder builder = null;
+
+        try {
+        	log.info("updating member :" + member);
+            // Validates member using bean validation
+            validateUser(member);
+
+            userService.save(member);
+
+            // Create an "ok" response
+            return Response.ok(member).build();
+        } catch (ConstraintViolationException ce) {
+            // Handle bean validation issues
+            builder = createViolationResponse(ce.getConstraintViolations());
+        } catch (ValidationException e) {
+            // Handle the unique constrain violation
+            Map<String, String> responseObj = new HashMap<String, String>();
+            responseObj.put("email", "Email taken");
+            builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
+        } catch (Exception e) {
+            // Handle generic exceptions
+            Map<String, String> responseObj = new HashMap<String, String>();
+            responseObj.put("error", e.getMessage());
+            builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+        }
+
+        return builder.build();
+    }
+
 
     /**
      * <p>
@@ -141,7 +179,7 @@ public class UserWS {
         }
 
         // Check the uniqueness of the email address
-        if (emailAlreadyExists(user.getEmail())) {
+        if (emailAlreadyExists(user)) {
             throw new ValidationException("Unique Email Violation");
         }
     }
@@ -169,16 +207,21 @@ public class UserWS {
      * Checks if a member with the same email address is already registered. This is the only way to easily capture the
      * "@UniqueConstraint(columnNames = "email")" constraint from the Member class.
      * 
-     * @param email The email to check
+     * @param user The email to check
      * @return True if the email already exists, and false otherwise
      */
-    public boolean emailAlreadyExists(String email) {
-        User user = null;
+    public boolean emailAlreadyExists(User user) {
+        User foundUser = null;
         try {
-            user = userService.findByEmail(email);
+            foundUser = userService.findByEmail(user.getEmail());
         } catch (NoResultException e) {
             // ignore
+        } catch (Exception e) {
+        	if (e.getCause() instanceof NoResultException)
+        		log.fine("Not found");
+        	else 
+        		throw e;
         }
-        return user != null;
+        return foundUser != null && foundUser.getId() != user.getId();
     }
 }
