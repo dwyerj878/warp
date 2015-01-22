@@ -18,5 +18,15 @@ angular.module('appMgr.services').factory('Apps', function($resource) {
 angular.module('appMgr.services').factory('Users', function($resource) {
 	return $resource('http://127.0.0.1:8080/services/rest/users/:userId', {
 		userId : '@id'
-	}); // Note the full endpoint address
+	},
+	{
+			'update' : {
+			method : 'PUT',
+			params : {
+				userId : '@id'
+			}
+		}
+	}
+	
+	); // Note the full endpoint address
 });

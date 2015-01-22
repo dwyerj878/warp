@@ -10,7 +10,7 @@
 		</thead>
 		
 		<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
-			<tr ng-repeat="user in users" >
+			<tr data-ng-repeat="user in users" >
 				<td style="width:100px;">{{$index}}</td>
 				<td style="width:110px;">{{app.id}}</td>
 				<td style="width:300px;"> <a href="#/users/{{user.id}}">{{user.name}}</a></td>
@@ -22,8 +22,10 @@
 				<td style="width:100px;">
 					New
 				</td>
-				<td style="width:110px;">
-					<button ng-click='newUser()'>New</button>
+				<td style="width:110px;"></td>
+				<td style="width:300px;">
+					<input data-ng-model='newUserName' style="width: 80%;"/>
+					<button data-ng-click='newUser()' style="float: right">New</button>
 				</td>
 			</tr>
 		</tfoot>

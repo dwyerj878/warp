@@ -7,11 +7,14 @@
 		</tr>
 		<tr>
 			<td>Name</td>
-			<td><input ng-model='app.name'/></td>
+			<td><input data-ng-model='app.name' style="width: 80%"/>
+			<button data-ng-click='saveApp()' style="float: right;">Save</button></td>
 		</tr>
 	</table>
 	
-	<table border="1" class="simpletablestyle" >
+	
+	
+	<table border="1" class="simpletablestyle" style="padding-top: 25px;" >
 		<thead style="display:block;">
 			<tr>
 				<th style="width:100px;">name</th>
@@ -23,22 +26,21 @@
 		</thead>
 		
 		<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
-			<tr ng-repeat="prop in app.properties" >
+			<tr data-ng-repeat="prop in app.properties" >
 				<td style="width:100px;">{{prop.name}}</td>
 				<td style="width:100px;">{{prop.environment}}</td>
 				<td style="width:100px;">{{prop.type}}</td>
 				<td style="width:310px;">{{prop.value}}</td>
-				<td style="width:100px;"><button ng-click='deleteProperty()'>Delete</button></td>
+				<td style="width:100px;"><button data-ng-click='deleteProperty()'>Delete</button></td>
 			</tr>
 			<tr>
-				<td style="width:100px;"><input ng-model="newProp.name" width="5"/></td>
-				<td style="width:100px;"><input ng-model="newProp.environment"/></td>
-				<td style="width:100px;"><input ng-model="newProp.type"/></td>
-				<td style="width:310px;"><input ng-model="newProp.value"/></td>
-				<td style="width:100px;"><button ng-click='saveProperty()'>Save</button></td>
+				<td style="width:100px;"><input data-ng-model="newProp.name" width="5"/></td>
+				<td style="width:100px;"><input data-ng-model="newProp.environment"/></td>
+				<td style="width:100px;"><input data-ng-model="newProp.type"/></td>
+				<td style="width:310px;"><input data-ng-model="newProp.value"/></td>
+				<td style="width:100px;"><button data-ng-click='saveProperty()'>Save</button></td>
 			</tr>			
 		</tbody>
-		<button ng-click='saveApp()'>Save</button>
-		
 	</table> 
+	
 </div>

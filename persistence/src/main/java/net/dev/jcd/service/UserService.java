@@ -40,7 +40,10 @@ public class UserService {
 
     public void save(User user) throws Exception {
         log.info("Registering " + user.getName());
-        em.persist(user);
+        if (user.getId() == null)
+        	em.persist(user);
+        else 
+        	em.merge(user);
         userEventSrc.fire(user);
     }
 

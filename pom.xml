@@ -10,4 +10,12 @@
     <module>services</module>
     <module>java-client</module>
   </modules>
+  
+  <properties>
+	<java.compier.version>1.8</java.compier.version>
+  	<java.compiler.source>1.8</java.compiler.source>
+  	
+  	<maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+  </properties>
 </project>

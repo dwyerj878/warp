@@ -19,4 +19,19 @@
 		<version>0.1.51</version>
 	</dependency>	  
   </dependencies>
+  
+  
+  	<build>
+  		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java.compier.version}</source>
+					<target>${java.compier.source}</target>
+				</configuration>
+			</plugin>			
+		</plugins>
+	</build>
 </project>
