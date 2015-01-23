@@ -1,6 +1,9 @@
-angular.module('appMgr.controllers', ['appMgr.services']);
+angular.module('appMgr.appControllers', ['appMgr.services']);
 
-angular.module('appMgr.controllers').controller('AppsController',
+/*
+ * Manage aplication list 
+ */
+angular.module('appMgr.appControllers').controller('AppsController',
 		[ '$scope', 'Apps', function($scope, Apps) {
 
 			var init = function() {
@@ -36,24 +39,8 @@ angular.module('appMgr.controllers').controller('AppsController',
 
 		} ]);
 
-angular.module('appMgr.controllers').controller('UsersController',
-		[ '$scope', 'Users', function($scope, Users) {
 
-			var init = function() {
-				console.info("init UsersController start");
-				$scope.users = Users.query();
-				console.info("init UsersController complete");
-			}
-
-			init();
-
-			$scope.newUser = function() {
-
-			};
-
-		} ]);
-
-angular.module('appMgr.controllers').controller(
+angular.module('appMgr.appControllers').controller(
 		'AppDetailController',
 		[ '$scope', '$routeParams', 'Apps',
 				function($scope, $routeParams, Apps) {
@@ -124,49 +111,3 @@ angular.module('appMgr.controllers').controller(
 
 				} ]);
 
-angular.module('appMgr.controllers').controller(
-		'UserDetailController',
-		[ '$scope', '$routeParams', 'Users',
-				function($scope, $routeParams, Users) {
-
-					var init = function() {
-						console.info("init UserDetailController start");
-						$scope.userId = $routeParams.userId;
-						Users.get({
-							userId : $scope.userId
-						}, function(data) {
-							$scope.user = data;
-							console.info("found user " + $scope.user.name);
-						}, function(error) {
-							alert("Could not find user" + error);
-						});
-
-						console.info("init UserDetailController complete");
-					}
-
-					$scope.saveUser = function() {
-						if ($scope.user.id) {
-							Users.update({
-								userId : $scope.user.id
-							}, $scope.user, function(data) {
-								$scope.user = data;
-								var x = data;
-								console.info("saved user " + $scope.user.name);
-							}, function(error) {
-								alert("Could not save user" + error.status);
-							});
-
-						} else {
-							Users.save($scope.user, function(data) {
-								$scope.user = data;
-								var x = data;
-								console.info("Saved user " + $scope.user.name);
-							}, function(error) {
-								alert("Could not save user" + error.status);
-							});
-						}
-					}
-					
-					init();
-
-				} ]);
