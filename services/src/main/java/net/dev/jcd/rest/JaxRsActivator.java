@@ -16,18 +16,38 @@
  */
 package net.dev.jcd.rest;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+
 /**
- * A class extending {@link Application} and annotated with @ApplicationPath is the Java EE 6 "no XML" approach to activating
- * JAX-RS.
+ * A class extending {@link Application} and annotated with @ApplicationPath is
+ * the Java EE 6 "no XML" approach to activating JAX-RS.
  * 
  * <p>
- * Resources are served relative to the servlet path specified in the {@link ApplicationPath} annotation.
+ * Resources are served relative to the servlet path specified in the
+ * {@link ApplicationPath} annotation.
  * </p>
  */
 @ApplicationPath("/rest")
 public class JaxRsActivator extends Application {
-    /* class body intentionally left blank */
+	/* class body intentionally left blank */
+
+	private Set<Object> singletons;
+
+	@Override
+	public Set<Object> getSingletons() {
+		if (singletons == null) {
+			singletons = new HashSet<Object>();
+			CorsFilter filter = new CorsFilter();
+			filter.getAllowedOrigins().add("*");
+			singletons.add(filter);
+		}
+
+		return singletons;
+	}
 }

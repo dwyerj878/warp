@@ -1,35 +1,33 @@
-<div id="main" class="content">
-	<div>Applications</div>
-	<table border="1" class="simpletablestyle" >
-		<thead style="display:block;">
-			<tr>
-				<th style="width:100px;">idx</th>
-				<th style="width:110px;">id</th>
-				<th style="width:300px;">name</th>
-			</tr>
-		</thead>
-		
-		<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
-			<tr data-ng-repeat="app in apps" >
-				<td style="width:100px;">{{$index}}</td>
-				<td style="width:110px;">{{app.id}}</td>
-				<td style="width:300px;"> <a href="#/apps/{{app.id}}">{{app.name}}</a></td>
-			</tr>
-		</tbody>
-		
-		<tfoot style="display:block;">
-			<tr>
-				<td style="width:100px;">
-					New
-				</td>
-				<td style="width:110px;">
-					
-				</td>
-				<td style="width:300px;">
-					<input data-ng-model='newAppName' style="width: 80%;"/>
-					<button data-ng-disabled='saveAppButtonDisabled()' data-ng-click='saveNewApp()' style="float : right;">Save</button>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
+
+<span style="font-weight: bold; border-bottom: 2px; border-bottom-style: solid;">Applications</span>
+<div style="padding-top: 25px;">
+<table border="1" class="simpletablestyle" style="table-layout: fixed">
+	<thead style="display: block;">
+		<tr>
+			<th style="width: 100px;">idx</th>
+			<th style="width: 110px;">id</th>
+			<th style="width: 300px;">name</th>
+		</tr>
+	</thead>
+
+	<tbody
+		style="height: 200px; overflow-y: auto; overflow-x: hidden; display: block;">
+		<tr data-ng-repeat="app in apps">
+			<td style="width: 100px;">{{$index}}</td>
+			<td style="width: 110px;">{{app.id}}</td>
+			<td style="width: 300px;"><a href="#/apps/{{app.id}}">{{app.name}}</a></td>
+		</tr>
+	</tbody>
+
+	<tfoot style="display: block;">
+		<tr>
+			<td style="width: 100px;">New</td>
+			<td style="width: 110px;"></td>
+			<td style="width: 300px;"><input data-ng-model='newAppName'
+				style="width: 80%;" />
+				<button data-ng-disabled='saveAppButtonDisabled()'
+					data-ng-click='saveNewApp()' style="float: right;">Save</button></td>
+		</tr>
+	</tfoot>
+</table>
 </div>

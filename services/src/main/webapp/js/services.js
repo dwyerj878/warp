@@ -36,3 +36,13 @@ angular.module('appMgr.services').factory('Users', function($resource) {
 	
 	); // Note the full endpoint address
 });
+
+
+/*
+ * rest services for users
+ */
+angular.module('appMgr.services').factory('ip', function($resource) {
+	return $resource('http://httpbin.org/ip' 
+	); // Note the full endpoint address
+});
+

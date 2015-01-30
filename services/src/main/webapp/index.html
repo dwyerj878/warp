@@ -4,19 +4,20 @@
  <link rel="stylesheet" type="text/css" href="resources/css/screen.css" />
  	
  <script type="text/javascript" src="angular/angular.js"></script>
-  <script type="text/javascript" src="angular/angular-route.js"></script>
+ <script type="text/javascript" src="angular/angular-route.js"></script>
  <script type="text/javascript" src="angular/angular-resource.js"></script>
  <script type="text/javascript" src="js/rest.js"> </script>
  <script type="text/javascript" src="js/services.js"></script>
  <script type="text/javascript" src="js/apps-controllers.js"></script> 
  <script type="text/javascript" src="js/users-controllers.js"></script>
+ <script type="text/javascript" src="js/header-controller.js"></script>
  <script type="text/javascript" src="js/app.js"></script> 
 
  
  <title>Applications</title>
 </head>
 <body>
-<div id="header" class="header">
+<div id="header" class="header" x-ng-controller="headerController">
 		<div style="position:fixed; left:15px; border: red; border-bottom-style: solid;">
 			<span style="font-size: 20pt">WARP</span>
 		</div>
@@ -24,14 +25,18 @@
 		<div style="position:fixed; right:15px; border: red; border-bottom-style: solid;">
 			<span style="font-size: 20pt; color: blue;">Application Management</span>
 		</div>
+		<div style="position:fixed; right:15px; top:40px;">
+			<span style="font-size: 7pt; color: green;">IP Address : </span>
+			<span style="font-size: 7pt; color: blue;" x-ng-bind="ipAddress"></span>
+		</div>
 		
-		<div id="menu" style="position: fixed; top: 55px; left: 10px; ">
-		
+		<div id="menu" style="position: fixed; top: 55px; left: 10px; ">		
 			<a x-ng-href ="#/apps" class="menuItem">Applications</a>
 			<a x-ng-href ="#/users" class="menuItem">Users</a>
 		</div>			
 	</div>
-  <div x-ng-view></div>
-
+  <div x-ng-view class="content">
+  </div>
+  
 </body>
 </html>

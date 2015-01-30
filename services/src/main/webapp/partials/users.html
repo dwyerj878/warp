@@ -1,23 +1,24 @@
-<div id="main" class="content">
-	<div>Users</div>
-	<table border="1" class="simpletablestyle" >
-		<thead style="display:block;">
+<span style="font-weight: bold; border-bottom: 2px; border-bottom-style: solid;">Users</span>
+<div style="padding-top: 25px;">
+	<table border="1" class="simpletablestyle">
+		<thead style="display: block;">
 			<tr>
-				<th style="width:100px;">idx</th>
-				<th style="width:110px;">id</th>
-				<th style="width:300px;">name</th>
+				<th style="width: 100px;">idx</th>
+				<th style="width: 110px;">id</th>
+				<th style="width: 300px;">name</th>
 			</tr>
 		</thead>
-		
-		<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
-			<tr data-ng-repeat="user in users" >
-				<td style="width:100px;">{{$index}}</td>
-				<td style="width:110px;">{{app.id}}</td>
-				<td style="width:300px;"> <a href="#/users/{{user.id}}">{{user.name}}</a></td>
+
+		<tbody
+			style="height: 200px; overflow-y: auto; overflow-x: hidden; display: block;">
+			<tr data-ng-repeat="user in users">
+				<td style="width: 100px;">{{$index}}</td>
+				<td style="width: 110px;">{{app.id}}</td>
+				<td style="width: 300px;"><a href="#/users/{{user.id}}">{{user.name}}</a></td>
 			</tr>
 		</tbody>
-		
-		<tfoot style="display:block;">
+
+		<tfoot style="display: block;">
 			<tr>
 				<td colspan="3">
 					<button data-ng-click='newUser()' style="float: right">New</button>
