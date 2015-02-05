@@ -1,10 +1,10 @@
-angular.module('appMgr.appControllers', ['appMgr.services']);
+angular.module('appMgr.appControllers', ['appMgr.services', 'appMgr.dialogs']);
 
 /*
  * Manage aplication list 
  */
 angular.module('appMgr.appControllers').controller('AppsController',
-		[ '$scope', 'Apps', function($scope, Apps) {
+		[ '$scope', 'Apps', 'errorDialog', function($scope, Apps, errorDialog) {
 
 			var init = function() {
 				console.info("init AppsController start");
@@ -30,10 +30,10 @@ angular.module('appMgr.appControllers').controller('AppsController',
 						$scope.apps = data;
 						$scope.newAppName = '';
 					}, function(err) {
-						alert('refresh failed');
+						showError("Could not ave App", error);
 					});
-				}, function(data) {
-					alert("save failed")
+				}, function(error) {
+					errorDialog("Could not Save App", error);
 				})
 			};
 
@@ -55,7 +55,7 @@ angular.module('appMgr.appControllers').controller(
 							var x = data;
 							console.info("found app " + $scope.app.name);
 						}, function(error) {
-							alert("Could not find app" + error);
+							errorDialog("Could not Find App", error);
 						});
 
 						$scope.newProp = {
@@ -95,7 +95,7 @@ angular.module('appMgr.appControllers').controller(
 								var x = data;
 								console.info("saved app " + $scope.app.name);
 							}, function(error) {
-								alert("Could not save app" + error.status);
+								errorDialog("Error Saving App", error);
 							});
 
 						} else {
@@ -104,7 +104,7 @@ angular.module('appMgr.appControllers').controller(
 								var x = data;
 								console.info("Saved app " + $scope.app.name);
 							}, function(error) {
-								alert("Could not save app" + error.status);
+								errorDialog("Error Saving App", error);
 							});
 						}
 					}

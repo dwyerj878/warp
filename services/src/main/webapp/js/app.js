@@ -1,4 +1,6 @@
-var appMgrApp = angular.module('appMgr', [ 'ngResource', 'ngRoute' , 'appMgr.appControllers', 'appMgr.userControllers', 'appMgr.headerControllers']);
+var appMgrApp = angular.module('appMgr', [ 'ngResource', 'ngRoute',
+		'appMgr.appControllers', 'appMgr.userControllers',
+		'appMgr.headerControllers', 'appMgr.dialogs' ]);
 
 appMgrApp.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/apps/:appId', {
