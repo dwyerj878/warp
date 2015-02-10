@@ -38,13 +38,14 @@ public class UserService {
     @Inject
     private Event<User> userEventSrc;
 
-    public void save(User user) throws Exception {
+	public User save(User user) throws Exception {
         log.info("Registering " + user.getName());
         if (user.getId() == null)
         	em.persist(user);
         else 
-        	em.merge(user);
+        	user = em.merge(user);
         userEventSrc.fire(user);
+        return user;
     }
 
 	/**

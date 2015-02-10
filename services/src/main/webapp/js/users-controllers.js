@@ -28,8 +28,8 @@ angular.module('appMgr.userControllers').controller(
  */
 angular.module('appMgr.userControllers').controller(
 		'UserDetailController',
-		[ '$scope', '$routeParams', 'Users', 'errorDialog', 
-				function($scope, $routeParams, Users, errorDialog) {
+		[ '$scope', '$routeParams', 'Users', 'errorDialog', 'successDialog', '$location',
+				function($scope, $routeParams, Users, errorDialog, successDialog, $location) {
 
 					var init = function() {
 						console.info("init UserDetailController start (" + $routeParams.userId + ")");
@@ -55,17 +55,19 @@ angular.module('appMgr.userControllers').controller(
 								userId : $scope.user.id
 							}, $scope.user, function(data) {
 								$scope.user = data;
-								var x = data;
 								console.info("saved user " + $scope.user.name);
+								successDialog('User Saved');								
+								$location.path("/users/"+$scope.user.id);
 							}, function(error) {
 								errorDialog("Error Saving User", error);
 							});
 
 						} else {
 							Users.save($scope.user, function(data) {
-								$scope.user = data;
-								var x = data;
+								$scope.user = data;								
 								console.info("Saved user " + $scope.user.name);
+								successDialog('User Saved');								
+								$location.path("/users/"+data.id);
 							}, function(error) {
 								errorDialog("Error Saving User", error);
 							});

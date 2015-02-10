@@ -16,10 +16,8 @@
  */
 package net.dev.jcd.rest;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -47,180 +45,134 @@ import net.dev.jcd.service.UserService;
 /**
  * JAX-RS Example
  * <p/>
- * This class produces a RESTful service to read/write the contents of the users table.
+ * This class produces a RESTful service to read/write the contents of the users
+ * table.
  */
 @Path("/users")
 @RequestScoped
 public class UserWS {
 
-    @Inject
-    private Logger log;
+	@Inject
+	private Logger log;
 
-    @Inject
-    private Validator validator;
+	@Inject
+	private Validator validator;
 
+	@Inject
+	private UserService userService;
 
-    @Inject
-    private UserService userService;
-    
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> listAllUsers() {
+		return userService.getUsers();
+	}
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<User> listAllUsers() {
-        return userService.getUsers();
-    }
+	@GET
+	@Path("/{id:[0-9][0-9]*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User lookupUserById(@PathParam("id") long id) {
+		User user = userService.findById(id);
+		if (user == null) {
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		return user;
+	}
 
-    @GET
-    @Path("/{id:[0-9][0-9]*}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public User lookupUserById(@PathParam("id") long id) {
-        User user = userService.findById(id);
-        if (user == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return user;
-    }
+	/**
+	 * Creates a new user from the values provided. Performs validation, and
+	 * will return a JAX-RS response with either 200 ok, or with a map of
+	 * fields, and related errors.
+	 * 
+	 * @throws Exception
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createUser(User member) throws Exception {
 
-    /**
-     * Creates a new user from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
-     * or with a map of fields, and related errors.
-     */
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(User member) {
-    	
-        Response.ResponseBuilder builder = null;
+		log.info("adding member :" + member);
+		// Validates member using bean validation
+		validateUser(member);
 
-        try {
-        	log.info("adding member :" + member);
-            // Validates member using bean validation
-            validateUser(member);
+		User result = userService.save(member);
 
-            userService.save(member);
+		// Create an "ok" response
+		return Response.ok(result).build();
+	}
 
-            // Create an "ok" response
-            builder = Response.ok();
-        } catch (ConstraintViolationException ce) {
-            // Handle bean validation issues
-            builder = createViolationResponse(ce.getConstraintViolations());
-        } catch (ValidationException e) {
-            // Handle the unique constrain violation
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("email", "Email taken");
-            builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
-        } catch (Exception e) {
-            // Handle generic exceptions
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("error", e.getMessage());
-            builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
-        }
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{id:[0-9][0-9]*}")
+	public Response updateUser(@PathParam("id") long id, User member) throws Exception {
 
-        return builder.build();
-    }
-    
-    
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id:[0-9][0-9]*}")
-    public Response updateUser(@PathParam("id") long id, User member) {
-        Response.ResponseBuilder builder = null;
+		log.info("updating member :" + member);
+		// Validates member using bean validation
+		validateUser(member);
 
-        try {
-        	log.info("updating member :" + member);
-            // Validates member using bean validation
-            validateUser(member);
+		User result = userService.save(member);
 
-            userService.save(member);
+		// Create an "ok" response
+		return Response.ok(result).build();
 
-            // Create an "ok" response
-            return Response.ok(member).build();
-        } catch (ConstraintViolationException ce) {
-            // Handle bean validation issues
-            builder = createViolationResponse(ce.getConstraintViolations());
-        } catch (ValidationException e) {
-            // Handle the unique constrain violation
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("email", "Email taken");
-            builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
-        } catch (Exception e) {
-            // Handle generic exceptions
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("error", e.getMessage());
-            builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
-        }
+	}
 
-        return builder.build();
-    }
+	/**
+	 * <p>
+	 * Validates the given Member variable and throws validation exceptions
+	 * based on the type of error. If the error is standard bean validation
+	 * errors then it will throw a ConstraintValidationException with the set of
+	 * the constraints violated.
+	 * </p>
+	 * <p>
+	 * If the error is caused because an existing member with the same email is
+	 * registered it throws a regular validation exception so that it can be
+	 * interpreted separately.
+	 * </p>
+	 * 
+	 * @param user
+	 *            Member to be validated
+	 * @throws ConstraintViolationException
+	 *             If Bean Validation errors exist
+	 * @throws ValidationException
+	 *             If member with the same email already exists
+	 */
+	private void validateUser(User user) throws ConstraintViolationException, ValidationException {
+		// Create a bean validator and check for issues.
+		Set<ConstraintViolation<User>> violations = validator.validate(user);
 
+		if (!violations.isEmpty()) {
+			throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
+		}
 
-    /**
-     * <p>
-     * Validates the given Member variable and throws validation exceptions based on the type of error. If the error is standard
-     * bean validation errors then it will throw a ConstraintValidationException with the set of the constraints violated.
-     * </p>
-     * <p>
-     * If the error is caused because an existing member with the same email is registered it throws a regular validation
-     * exception so that it can be interpreted separately.
-     * </p>
-     * 
-     * @param user Member to be validated
-     * @throws ConstraintViolationException If Bean Validation errors exist
-     * @throws ValidationException If member with the same email already exists
-     */
-    private void validateUser(User user) throws ConstraintViolationException, ValidationException {
-        // Create a bean validator and check for issues.
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
+		// Check the uniqueness of the email address
+		if (emailAlreadyExists(user)) {
+			throw new ValidationException("Unique Email Violation");
+		}
+	}
 
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
-        }
-
-        // Check the uniqueness of the email address
-        if (emailAlreadyExists(user)) {
-            throw new ValidationException("Unique Email Violation");
-        }
-    }
-
-    /**
-     * Creates a JAX-RS "Bad Request" response including a map of all violation fields, and their message. This can then be used
-     * by clients to show violations.
-     * 
-     * @param violations A set of violations that needs to be reported
-     * @return JAX-RS response containing all violations
-     */
-    private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
-        log.fine("Validation completed. violations found: " + violations.size());
-
-        Map<String, String> responseObj = new HashMap<String, String>();
-
-        for (ConstraintViolation<?> violation : violations) {
-            responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
-        }
-
-        return Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
-    }
-
-    /**
-     * Checks if a member with the same email address is already registered. This is the only way to easily capture the
-     * "@UniqueConstraint(columnNames = "email")" constraint from the Member class.
-     * 
-     * @param user The email to check
-     * @return True if the email already exists, and false otherwise
-     */
-    public boolean emailAlreadyExists(User user) {
-        User foundUser = null;
-        try {
-            foundUser = userService.findByEmail(user.getEmail());
-        } catch (NoResultException e) {
-            // ignore
-        } catch (Exception e) {
-        	if (e.getCause() instanceof NoResultException)
-        		log.fine("Not found");
-        	else 
-        		throw e;
-        }
-        return foundUser != null && foundUser.getId() != user.getId();
-    }
+	/**
+	 * Checks if a member with the same email address is already registered.
+	 * This is the only way to easily capture the
+	 * "@UniqueConstraint(columnNames = "email")" constraint from the Member
+	 * class.
+	 * 
+	 * @param user
+	 *            The email to check
+	 * @return True if the email already exists, and false otherwise
+	 */
+	public boolean emailAlreadyExists(User user) {
+		User foundUser = null;
+		try {
+			foundUser = userService.findByEmail(user.getEmail());
+		} catch (NoResultException e) {
+			// ignore
+		} catch (Exception e) {
+			if (e.getCause() instanceof NoResultException)
+				log.fine("Not found");
+			else
+				throw e;
+		}
+		return foundUser != null && foundUser.getId() != user.getId();
+	}
 }

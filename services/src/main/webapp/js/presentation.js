@@ -21,8 +21,26 @@ angular.module('appMgr.dialogs').factory(
 				    plain: true,
 				    showClose: true,
 			        closeByDocument: true,
-			        closeByEscape: true,
-			        className: 'ngdialog-theme-plain'
+			        closeByEscape: true
 				});				
 			};
 		} ]);
+
+
+angular.module('appMgr.dialogs').factory(
+		'successDialog',
+		[ 'ngDialog', function(ngDialog) {
+			return function(msg) {
+				message = "<br><font color='orange'>" +msg+"</font></br>";
+				
+				console.info(message);
+				ngDialog.open({
+				    template: message,
+				    plain: true,
+				    showClose: true,
+			        closeByDocument: true,
+			        closeByEscape: true
+				});				
+			};
+		} ]);
+

@@ -4,7 +4,7 @@ angular.module('appMgr.appControllers', ['appMgr.services', 'appMgr.dialogs']);
  * Manage aplication list 
  */
 angular.module('appMgr.appControllers').controller('AppsController',
-		[ '$scope', 'Apps', 'errorDialog', function($scope, Apps, errorDialog) {
+		[ '$scope', 'Apps', 'errorDialog', '$location', function($scope, Apps, errorDialog, $location) {
 
 			var init = function() {
 				console.info("init AppsController start");
@@ -17,42 +17,32 @@ angular.module('appMgr.appControllers').controller('AppsController',
 
 			$scope.saveAppButtonDisabled = function() {
 				return $scope.newAppName.length == 0;
-
 			}
 
-			$scope.saveNewApp = function() {
-				console.log("save");
-				Apps.save({
-					name : $scope.newAppName
-				}, function(data) {
-					Apps.query(function(data) {
-						console.log('saved');
-						$scope.apps = data;
-						$scope.newAppName = '';
-					}, function(err) {
-						showError("Could not ave App", error);
-					});
-				}, function(error) {
-					errorDialog("Could not Save App", error);
-				})
-			};
+			
+			$scope.newApp = function() {				
+				$location.path("/apps/new");						
+			}
 
 		} ]);
 
 
 angular.module('appMgr.appControllers').controller(
 		'AppDetailController',
-		[ '$scope', '$routeParams', 'Apps',
-				function($scope, $routeParams, Apps) {
+		[ '$scope', '$routeParams', 'Apps', 'successDialog', 'errorDialog', '$location',
+				function($scope, $routeParams, Apps, successDialog, errorDialog, $location) {
 
 					var init = function() {
 						console.info("init AppDetailController start");
+						
+						if ($routeParams.appId == "new")
+							return;						
+						
 						$scope.appId = $routeParams.appId;
 						Apps.get({
 							appId : $scope.appId
 						}, function(data) {
 							$scope.app = data;
-							var x = data;
 							console.info("found app " + $scope.app.name);
 						}, function(error) {
 							errorDialog("Could not Find App", error);
@@ -92,8 +82,9 @@ angular.module('appMgr.appControllers').controller(
 								appId : $scope.app.id
 							}, $scope.app, function(data) {
 								$scope.app = data;
-								var x = data;
 								console.info("saved app " + $scope.app.name);
+								successDialog('App Saved "' +  $scope.app.name + '"');								
+								$location.path("/apps/"+$scope.app.id);								
 							}, function(error) {
 								errorDialog("Error Saving App", error);
 							});
@@ -101,8 +92,9 @@ angular.module('appMgr.appControllers').controller(
 						} else {
 							Apps.save($scope.app, function(data) {
 								$scope.app = data;
-								var x = data;
 								console.info("Saved app " + $scope.app.name);
+								successDialog('App Saved "' +  $scope.app.name + '"');								
+								$location.path("/apps/"+$scope.app.id);
 							}, function(error) {
 								errorDialog("Error Saving App", error);
 							});

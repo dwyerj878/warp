@@ -40,7 +40,7 @@ public class AppService {
     @Inject 
     private ApplicationRepository appRepository;
 
-    public void save(Application application) throws Exception {
+    public Application save(Application application) throws Exception {
         log.info("Saving " + application.getName());
         if (application.getId() == null)
         	em.persist(application);
@@ -50,9 +50,10 @@ public class AppService {
         	existing.setName(application.getName());
         	existing.setProperties(application.getProperties());
         	existing.setEnvironments(application.getEnvironments());
-        	em.merge(existing);
+        	application = em.merge(existing);
         }
         appEventSrc.fire(application);
+        return application;
     }
 
 	/**

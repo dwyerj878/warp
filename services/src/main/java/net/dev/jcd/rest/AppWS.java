@@ -16,13 +16,12 @@
  */
 package net.dev.jcd.rest;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -84,76 +83,37 @@ public class AppWS {
     /**
      * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.
+     * @throws Exception 
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createApp(Application app) {
-    	
-        Response.ResponseBuilder builder = null;
+	public Response createApp(Application app) throws Exception {
 
-        try {
-        	log.info("adding member :" + app);
-            // Validates member using bean validation
-            validateMember(app);
+		log.info("Saving Application:" + app);
+		// Validates member using bean validation
+		validateMember(app);
 
-            appService.save(app);
+		Application result = appService.save(app);
 
-            // Create an "ok" response
-            builder = Response.ok();
-        } catch (ConstraintViolationException ce) {
-            // Handle bean validation issues
-            builder = createViolationResponse(ce.getConstraintViolations());
-        } catch (ValidationException e) {
-            // Handle the unique constrain violation
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("name", "Name Already in use");
-            builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
-        } catch (Exception e) {
-            // Handle generic exceptions
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("error", e.getMessage());
-            builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
-        }
-
-        return builder.build();
-    }
+		// Create an "ok" response
+		return Response.ok(result).build();
+	}
     
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id:[0-9][0-9]*}")
-    public Response updateApp(@PathParam("id") long id, Application app) {
-    	
-        Response.ResponseBuilder builder = null;
+	public Response updateApp(@PathParam("id") long id, Application app) throws Exception {
+		log.info("updating app :" + app);
+		// Validates member using bean validation
+		validateMember(app);
 
-        try {
-        	log.info("updating app :" + app);
-            // Validates member using bean validation
-            validateMember(app);
+		Application result = appService.save(app);
 
-            appService.save(app);
-
-            // Create an "ok" response
-            builder = Response.ok();
-        } catch (ConstraintViolationException ce) {
-            // Handle bean validation issues
-            builder = createViolationResponse(ce.getConstraintViolations());
-        } catch (ValidationException e) {
-            // Handle the unique constrain violation
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("name", "Name Already in use");
-            builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
-        } catch (Exception e) {
-            // Handle generic exceptions
-            Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("error", e.getMessage());
-            builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
-        }
-
-        return builder.build();
-    }
-
+		// Create an "ok" response
+		return Response.ok(result).build();
+	}
 
     /**
      * <p>
@@ -185,25 +145,6 @@ public class AppWS {
     
 
     /**
-     * Creates a JAX-RS "Bad Request" response including a map of all violation fields, and their message. This can then be used
-     * by clients to show violations.
-     * 
-     * @param violations A set of violations that needs to be reported
-     * @return JAX-RS response containing all violations
-     */
-    private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
-        log.fine("Validation completed. violations found: " + violations.size());
-
-        Map<String, String> responseObj = new HashMap<String, String>();
-
-        for (ConstraintViolation<?> violation : violations) {
-            responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
-        }
-
-        return Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
-    }
-
-    /**
      * Checks if an application with the same name is already registered. This is the only way to easily capture the
      * "@UniqueConstraint(columnNames = "name")" constraint from the {@link Application} class.
      * 
@@ -215,7 +156,9 @@ public class AppWS {
         try {
             app = appService.findByName(name);
         } catch (NoResultException e) {
-            // ignore
+        	log.warning(e.getLocalizedMessage());
+        } catch (EJBException e) {
+        	log.warning(e.getLocalizedMessage());
         }
         return app != null;
     }
