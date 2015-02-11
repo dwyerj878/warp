@@ -75,6 +75,19 @@ angular.module('appMgr.appControllers').controller(
 						$scope.newProp.value = "";
 
 					}
+					
+					
+					$scope.deleteProperty = function(name) {
+						console.info("delete property '" + name + "'");
+						for (var index = 0; index < $scope.app.properties.length; index++) {
+							val = $scope.app.properties[index];
+							if (val.name == name)
+								remove = index;								
+						}
+						if (remove)
+							$scope.app.properties.splice(remove,1);
+					
+					}
 
 					$scope.saveApp = function() {
 						if ($scope.app.id) {

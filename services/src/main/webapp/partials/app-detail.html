@@ -32,7 +32,7 @@
 				<td style="width:200px;">{{prop.environment}}</td>
 				<td style="width:200px;">{{prop.type}}</td>
 				<td style="width:310px;">{{prop.value}}</td>
-				<td style="width:200px;"><button data-ng-click='deleteProperty()'>Delete</button></td>
+				<td style="width:200px;"><button x-ng-click='deleteProperty(prop.name)'>Delete</button></td>
 			</tr>
 			<tr>
 				<td style="width:200px;"><input data-ng-model="newProp.name" width="5"/></td>
