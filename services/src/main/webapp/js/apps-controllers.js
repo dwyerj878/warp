@@ -14,12 +14,10 @@ angular.module('appMgr.appControllers').controller('AppsController',
 			}
 
 			init();
-
-			$scope.saveAppButtonDisabled = function() {
-				return $scope.newAppName.length == 0;
-			}
-
 			
+			/*
+			 * redirect to new app screen
+			 */
 			$scope.newApp = function() {				
 				$location.path("/apps/new");						
 			}
@@ -27,6 +25,9 @@ angular.module('appMgr.appControllers').controller('AppsController',
 		} ]);
 
 
+/*
+ * Manage Application details
+ */
 angular.module('appMgr.appControllers').controller(
 		'AppDetailController',
 		[ '$scope', '$routeParams', 'Apps', 'successDialog', 'errorDialog', '$location',
@@ -38,6 +39,7 @@ angular.module('appMgr.appControllers').controller(
 						if ($routeParams.appId == "new")
 							return;						
 						
+						// find app by id
 						$scope.appId = $routeParams.appId;
 						Apps.get({
 							appId : $scope.appId
@@ -59,7 +61,11 @@ angular.module('appMgr.appControllers').controller(
 					}
 
 					init();
-
+					
+					
+					/*
+					 * Save property 
+					 */
 					$scope.saveProperty = function() {
 						console.info("save property");
 						$scope.newProp.appId = $scope.app.id;
@@ -76,17 +82,34 @@ angular.module('appMgr.appControllers').controller(
 
 					}
 					
-					
+					/*
+					 * Delete property
+					 */
 					$scope.deleteProperty = function(name) {
 						console.info("delete property '" + name + "'");
+						// find the index of the matching property
+						remove = -1;
 						for (var index = 0; index < $scope.app.properties.length; index++) {
 							val = $scope.app.properties[index];
 							if (val.name == name)
 								remove = index;								
 						}
-						if (remove)
-							$scope.app.properties.splice(remove,1);
+						if (remove > -1)
+							$scope.app.properties.splice(remove,1);					
+					}
 					
+					$scope.validProperty = function() {
+						if ($scope.newProp.name.length == 0) return false;
+						if ($scope.newProp.environment.length == 0) return false;
+						if ($scope.newProp.type.length == 0) return false;
+						if ($scope.newProp.value.length == 0) return false;
+						for (var index = 0; index < $scope.app.properties.length; index++) {
+							val = $scope.app.properties[index];
+							if (val.name == $scope.newProp.name &&  val.environment == $scope.newProp.environment)
+								return false;
+						}				
+						
+						return true;
 					}
 
 					$scope.saveApp = function() {

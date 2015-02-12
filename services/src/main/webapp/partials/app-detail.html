@@ -1,46 +1,48 @@
-	<span style="font-weight: bold; border-bottom: 2px; border-bottom-style: solid;">Application Detail</span>
-	
-	<div style="padding-top: 25px;">
-	<table class="simpletablestyle" style="table-layout: fixed" >
+<span style="font-weight: bold; border-bottom: 2px; border-bottom-style: solid;">Application Detail</span>
+
+<div style="padding-top: 25px;">
+<table class="simpletablestyle" style="table-layout: fixed" >
+	<tr>
+		<td style="width:150px;">ID</td>
+		<td style="width:500px;" >{{app.id}}</td>
+	</tr>
+	<tr>
+		<td>Name</td>
+		<td><input data-ng-model='app.name' style="width: 80%"/>
+		<button data-ng-click='saveApp()' style="float: right;">Save App</button></td>
+	</tr>
+</table>
+</div>
+
+<span style="font-weight: bold; border-bottom: 2px; border-bottom-style: solid;">Application Properties</span>
+<div style="padding-top: 25px;">
+<table border="1" class="simpletablestyle" style="table-layout: fixed; width: 80%" >
+	<thead style="display: table;">
 		<tr>
-			<td style="width:150px;">ID</td>
-			<td style="width:350px;" >{{app.id}}</td>
+			<th style="width:200px;">name</th>
+			<th style="width:200px;">environment</th>
+			<th style="width:200px;">type</th>
+			<th style="width:310px;">value</th>
+			<th style="width:200px;">action</th>
+			
+		</tr>
+	</thead>
+	
+	<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
+		<tr data-ng-repeat="prop in app.properties" >
+			<td style="width:200px;">{{prop.name}}</td>
+			<td style="width:200px;">{{prop.environment}}</td>
+			<td style="width:200px;">{{prop.type}}</td>
+			<td style="width:310px;">{{prop.value}}</td>
+			<td style="width:200px;"><button x-ng-click='deleteProperty(prop.name)'>Remove</button></td>
 		</tr>
 		<tr>
-			<td>Name</td>
-			<td><input data-ng-model='app.name' style="width: 80%"/>
-			<button data-ng-click='saveApp()' style="float: right;">Save</button></td>
-		</tr>
-	</table>
-	</div>
-	
-	<div style="padding-top: 25px;">
-	<table border="1" class="simpletablestyle" style="table-layout: fixed; width: 80%" >
-		<thead style="display: table;">
-			<tr>
-				<th style="width:200px;">name</th>
-				<th style="width:200px;">environment</th>
-				<th style="width:200px;">type</th>
-				<th style="width:310px;">value</th>
-				<th style="width:200px;">action</th>
-			</tr>
-		</thead>
-		
-		<tbody style="height: 200px; overflow-y: auto; overflow-x: hidden; display:block;">
-			<tr data-ng-repeat="prop in app.properties" >
-				<td style="width:200px;">{{prop.name}}</td>
-				<td style="width:200px;">{{prop.environment}}</td>
-				<td style="width:200px;">{{prop.type}}</td>
-				<td style="width:310px;">{{prop.value}}</td>
-				<td style="width:200px;"><button x-ng-click='deleteProperty(prop.name)'>Delete</button></td>
-			</tr>
-			<tr>
-				<td style="width:200px;"><input data-ng-model="newProp.name" width="5"/></td>
-				<td style="width:200px;"><input data-ng-model="newProp.environment"/></td>
-				<td style="width:200px;"><input data-ng-model="newProp.type"/></td>
-				<td style="width:310px;"><input data-ng-model="newProp.value"/></td>
-				<td style="width:200px;"><button data-ng-click='saveProperty()'>Save</button></td>
-			</tr>			
-		</tbody>
-	</table> 
-	</div>
+			<td style="width:200px;"><input data-ng-model="newProp.name"/></td>
+			<td style="width:200px;"><input data-ng-model="newProp.environment"/></td>
+			<td style="width:200px;"><input data-ng-model="newProp.type"/></td>
+			<td style="width:310px;"><input data-ng-model="newProp.value"/></td>
+			<td style="width:200px;"><button data-ng-click='saveProperty()' x-ng-disabled='!validProperty()'>Add</button></td>
+		</tr>			
+	</tbody>
+</table> 
+</div>
