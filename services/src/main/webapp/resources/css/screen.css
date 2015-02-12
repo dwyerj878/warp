@@ -179,13 +179,14 @@ input {
   height:2em;
   padding-left: 6px;
   font-size:11px;
-  padding:5px 5px;
+  padding:0 10px 0 5px;
 }
 
 .simpletablestyle tbody {
 	height: 100px;
     overflow-y: auto;
     overflow-x: hidden;
+    
 }
 
 .simpletablestyle th {
@@ -201,6 +202,7 @@ input {
   height:31px;
   font-size:10px;
   font-weight:bold;
+  padding:0 10px 0 5px;
   color:#FFFFFF;
   text-align:left;
 }
