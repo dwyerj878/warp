@@ -46,11 +46,14 @@ public class AppService {
         	em.persist(application);
         else 
         {
-        	Application existing = em.find(Application.class, application.getId());
-        	existing.setName(application.getName());
-        	existing.setProperties(application.getProperties());
-        	existing.setEnvironments(application.getEnvironments());
-        	application = em.merge(existing);
+        	Application saved = em.merge(application);
+//        	em.persist(application);
+//        	Application existing = em.find(Application.class, application.getId());
+//        	existing.setName(application.getName());
+//        	existing.getProperties().clear();
+//        	existing.getProperties().addAll(application.getProperties());
+//        	existing.setEnvironments(application.getEnvironments());
+//        	em.persist(existing);
         }
         appEventSrc.fire(application);
         return application;

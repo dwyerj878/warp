@@ -36,6 +36,15 @@ angular.module('appMgr.appControllers').controller(
 					var init = function() {
 						console.info("init AppDetailController start");
 						
+						// set available types
+						// TODO - this should be data driven
+						$scope.availableTypes = [
+						"String",
+						"Number",
+						"Boolean"
+                        ];
+						
+						// Check if this is a new app
 						if ($routeParams.appId == "new")
 							return;						
 						
@@ -85,33 +94,48 @@ angular.module('appMgr.appControllers').controller(
 					/*
 					 * Delete property
 					 */
-					$scope.deleteProperty = function(name) {
+					$scope.deleteProperty = function(name, environment) {
 						console.info("delete property '" + name + "'");
 						// find the index of the matching property
 						remove = -1;
 						for (var index = 0; index < $scope.app.properties.length; index++) {
 							val = $scope.app.properties[index];
-							if (val.name == name)
+							if (val.name == name && val.environment == environment)
 								remove = index;								
 						}
 						if (remove > -1)
 							$scope.app.properties.splice(remove,1);					
 					}
 					
+					/*
+					 * Check that a property is complete and not a duplicate
+					 */
 					$scope.validProperty = function() {
+						// check values are not empty
+						if (!$scope.newProp.name) return false;
 						if ($scope.newProp.name.length == 0) return false;
+						
 						if ($scope.newProp.environment.length == 0) return false;
+						if (!$scope.newProp.type) return false;
+						
+						if (!$scope.newProp.type) return false;
 						if ($scope.newProp.type.length == 0) return false;
+						
+						if (!$scope.newProp.value) return false;
 						if ($scope.newProp.value.length == 0) return false;
+						
+						// check that this is not a duplicate
 						for (var index = 0; index < $scope.app.properties.length; index++) {
 							val = $scope.app.properties[index];
 							if (val.name == $scope.newProp.name &&  val.environment == $scope.newProp.environment)
 								return false;
 						}				
-						
 						return true;
 					}
 
+					/*
+					 * Save the application
+					 */
 					$scope.saveApp = function() {
 						if ($scope.app.id) {
 							Apps.update({

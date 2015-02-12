@@ -40,7 +40,7 @@ public class Application implements Serializable {
     @NotEmpty
     private String name;
     
-    @OneToMany(fetch=FetchType.EAGER, cascade={CascadeType.ALL})
+    @OneToMany(fetch=FetchType.EAGER, cascade={CascadeType.ALL} )
     @JoinColumn(name="applicationId")    
     private Set<ApplicationProperty> properties;
 

@@ -31,11 +31,17 @@ angular.module('appMgr.userControllers').controller(
 		[ '$scope', '$routeParams', 'Users', 'errorDialog', 'successDialog', '$location',
 				function($scope, $routeParams, Users, errorDialog, successDialog, $location) {
 
+					/*
+					 * Init user view 
+					 */
 					var init = function() {
 						console.info("init UserDetailController start (" + $routeParams.userId + ")");
+						
+						// check if user is new
 						if ($routeParams.userId == "new")
 							return;
 						
+						// get user details by id
 						$scope.userId = $routeParams.userId;						
 						Users.get({
 							userId : $scope.userId

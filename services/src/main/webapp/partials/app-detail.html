@@ -34,12 +34,18 @@
 			<td style="width:200px;">{{prop.environment}}</td>
 			<td style="width:200px;">{{prop.type}}</td>
 			<td style="width:310px;">{{prop.value}}</td>
-			<td style="width:200px;"><button x-ng-click='deleteProperty(prop.name)'>Remove</button></td>
+			<td style="width:200px;"><button x-ng-click='deleteProperty(prop.name, prop.environment)'>Remove</button></td>
 		</tr>
 		<tr>
 			<td style="width:200px;"><input data-ng-model="newProp.name"/></td>
 			<td style="width:200px;"><input data-ng-model="newProp.environment"/></td>
-			<td style="width:200px;"><input data-ng-model="newProp.type"/></td>
+			<td style="width:200px;">
+			<!-- <input data-ng-model="newProp.type"/>  -->
+			<select x-ng-model="newProp.type" x-ng-init="newProp.type=availableTypes[0]">
+				<option x-ng-repeat="type in availableTypes" value="{{type}}">{{type}}</option>				
+			</select>
+			</td>
+			
 			<td style="width:310px;"><input data-ng-model="newProp.value"/></td>
 			<td style="width:200px;"><button data-ng-click='saveProperty()' x-ng-disabled='!validProperty()'>Add</button></td>
 		</tr>			
